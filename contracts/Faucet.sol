@@ -1,15 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
+import "./Owned.sol";
 
-contract Faucet {
+contract Faucet is Owned {
     uint256 public numOfFunders;
-    address public owner;
     mapping(address => bool) public funders;
     mapping(uint256 => address) public lutFunders;
-
-    constructor() {
-        owner = msg.sender;
-    }
 
     receive() external payable {}
 
@@ -19,15 +15,6 @@ contract Faucet {
             "Cannot withdraw more than 1 eth"
         );
         _;
-    }
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can call this function");
-        _;
-    }
-
-    function transferOwnership(address newOwner) external onlyOwner {
-        owner = newOwner;
     }
 
     function addFunds() external payable {
