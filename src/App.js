@@ -16,7 +16,7 @@ function App() {
   const [account, setAccount] = useState(null)
   const [shouldReload, reload] = useState(false)
 
-  const reloadEffect = () => reload(!shouldReload)
+  const reloadEffect = useCallback(() => reload(!shouldReload), [shouldReload])
 
   useEffect(() => {
     const loadProvider = async () => {
@@ -60,7 +60,16 @@ function App() {
       value: web3.utils.toWei("1", "ether")
     })
     reloadEffect()
-  }, [web3Api, account])
+  }, [web3Api, account, reloadEffect])
+
+  const withdrawFunds = async () => {
+    const { contract, web3 } = web3Api
+    const withdrawAmount = web3.utils.toWei("0.1", "ether")
+    await contract.withdraw(withdrawAmount, {
+      from: account,
+    })
+    reloadEffect()
+  }
 
 
   return (
@@ -83,7 +92,7 @@ function App() {
           </div>
 
           <button className="button is-link mr-2" onClick={addFunds}>Donate 1 ETH</button>
-          <button className="button is-primary">Withdraw</button>
+          <button className="button is-primary" onClick={withdrawFunds}>Withdraw 0.1 ETH</button>
         </div>
       </div>
     </>
