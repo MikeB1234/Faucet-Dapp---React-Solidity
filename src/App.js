@@ -19,7 +19,7 @@ function App() {
   const reloadEffect = useCallback(() => reload(!shouldReload), [shouldReload])
 
   const setAccountListener = (provider) => {
-    provider.on("accountsChanged", accounts => setAccount(accounts[0]))
+    provider.on("accountsChanged", accounts => window.location.reload())
   }
 
   useEffect(() => {
@@ -96,8 +96,8 @@ function App() {
             Current Balance <strong>{balance}</strong> ETH
           </div>
 
-          <button className="button is-link mr-2" onClick={addFunds}>Donate 1 ETH</button>
-          <button className="button is-primary" onClick={withdrawFunds}>Withdraw 0.1 ETH</button>
+          <button disabled={!account} className="button is-link mr-2" onClick={addFunds}>Donate 1 ETH</button>
+          <button disabled={!account} className="button is-primary" onClick={withdrawFunds}>Withdraw 0.1 ETH</button>
         </div>
       </div>
     </>
